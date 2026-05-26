@@ -1,0 +1,116 @@
+# ═══════════════════════════════════════════════════════════════
+# A.H.I. — Artificial Human Intelligence
+# Central Configuration
+# ═══════════════════════════════════════════════════════════════
+
+# --- Ollama LLM Settings ---
+ollama:
+  base_url: "http://localhost:11434"
+  models:
+    general: "llama3.1:latest"
+    code: "qwen2.5-coder:7b"
+    embedding: "nomic-embed-text"
+  options:
+    temperature: 0.7
+    top_p: 0.9
+    num_ctx: 8192          # Context window size
+
+# --- Memory Settings ---
+memory:
+  short_term:
+    buffer_size: 20
+    filepath: "data/short_term.json"
+  long_term:
+    chromadb_path: "data/chromadb"
+    collection_name: "jane_memory"
+    max_results: 5
+  project_state:
+    filepath: "data/project_state.json"
+
+# --- Knowledge / RAG ---
+knowledge:
+  sources_dir: "knowledge/sources"
+  chromadb_path: "data/chromadb"
+  collection_name: "jane_knowledge"
+  chunk_size: 500          # tokens per chunk
+  chunk_overlap: 50        # token overlap between chunks
+  max_results: 5
+
+# --- Personality ---
+personality:
+  active_persona: "patrick_jane"
+  traits:
+    humor: 0.6
+    playfulness: 0.5
+    curiosity: 0.9
+    psychological_insight: 0.9
+    confidence: 0.8
+  teaching_style: "socratic"
+
+# --- Tools ---
+tools:
+  code_executor:
+    enabled: true
+    timeout_seconds: 10
+    max_output_chars: 2000
+    requires_approval: true
+  web_search:
+    enabled: true
+    max_results: 5
+  ip_locator:
+    enabled: true
+    api_url: "http://ip-api.com/json/"
+  file_manager:
+    enabled: true
+    allowed_directories:
+      - "."                # Project root
+      - "knowledge/sources"
+    requires_approval_for_write: true
+  system_info:
+    enabled: true
+  cyber_helper:
+    enabled: true
+    requires_approval: true
+    allowed_hosts:
+      - "scanme.nmap.org"  # Official nmap test host
+      - "example.com"
+
+# --- News RSS Feeds ---
+news:
+  feeds:
+    - name: "Hacker News"
+      url: "https://hnrss.org/frontpage"
+    - name: "BBC World"
+      url: "http://feeds.bbci.co.uk/news/world/rss.xml"
+    - name: "BBC Technology"
+      url: "http://feeds.bbci.co.uk/news/technology/rss.xml"
+    - name: "ArsTechnica"
+      url: "https://feeds.arstechnica.com/arstechnica/index"
+    - name: "ThreatPost"
+      url: "https://threatpost.com/feed/"
+
+# --- Safety ---
+safety:
+  allowed_base_dirs:
+    - "."
+  blocked_commands:
+    - "rm -rf"
+    - "format"
+    - "del /s"
+  max_code_execution_time: 10
+  require_approval_for_network: true
+
+# --- Logging ---
+logging:
+  level: "INFO"
+  file: "data/logs/jane.log"
+  max_bytes: 5242880      # 5 MB
+  backup_count: 3
+
+# --- UI ---
+ui:
+  default: "cli"           # cli | webui
+  cli:
+    theme: "dark"
+    show_tool_calls: true
+    show_thinking: false
