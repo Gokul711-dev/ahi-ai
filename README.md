@@ -1,12 +1,8 @@
 # A.H.I. — Artificial Human Intelligence (Jane OS)
 
-> *"I suspect the real issue isn't the code — it's the architecture."*
+<img width="1920" height="1015" alt="Screenshot 2026-05-28 015305" src="https://github.com/user-attachments/assets/91c3b70b-b0d7-4f42-bbec-ba6c7fb5ca3e" />
+<img width="1920" height="1015" alt="Screenshot 2026-05-28 015334" src="https://github.com/user-attachments/assets/8e4f2f30-7959-45be-97ef-0cdd1f7d57ce" />
 
-A local-first, privacy-respecting AI cognitive assistant modeled after **Patrick Jane** from *The Mentalist*, fused with the operational intelligence of **J.A.R.V.I.S.**
-
-Built entirely on free, open-source tools. Runs 100% on your machine.
-
----
 
 ## What Jane Can Do
 
