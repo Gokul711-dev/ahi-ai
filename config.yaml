@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════
-# A.H.I. — Artificial Human Intelligence
-# Central Configuration
+# A.H.I. — Artificial Human Intelligence (Jane OS)
+# Central Configuration — Production Grade
 # ═══════════════════════════════════════════════════════════════
 
 # --- Ollama LLM Settings ---
@@ -11,9 +11,9 @@ ollama:
     code: "qwen2.5-coder:7b"
     embedding: "nomic-embed-text"
   options:
-    temperature: 0.7
-    top_p: 0.9
-    num_ctx: 8192          # Context window size
+    temperature: 0.6
+    top_p: 0.8
+    num_ctx: 8192
 
 # --- Memory Settings ---
 memory:
@@ -32,19 +32,19 @@ knowledge:
   sources_dir: "knowledge/sources"
   chromadb_path: "data/chromadb"
   collection_name: "jane_knowledge"
-  chunk_size: 500          # tokens per chunk
-  chunk_overlap: 50        # token overlap between chunks
+  chunk_size: 500
+  chunk_overlap: 50
   max_results: 5
 
 # --- Personality ---
 personality:
   active_persona: "patrick_jane"
   traits:
-    humor: 0.6
-    playfulness: 0.5
+    humor: 0.7
+    playfulness: 0.6
     curiosity: 0.9
     psychological_insight: 0.9
-    confidence: 0.8
+    confidence: 0.9
   teaching_style: "socratic"
 
 # --- Tools ---
@@ -63,7 +63,7 @@ tools:
   file_manager:
     enabled: true
     allowed_directories:
-      - "."                # Project root
+      - "."
       - "knowledge/sources"
     requires_approval_for_write: true
   system_info:
@@ -72,8 +72,9 @@ tools:
     enabled: true
     requires_approval: true
     allowed_hosts:
-      - "scanme.nmap.org"  # Official nmap test host
-      - "example.com"
+      - "scanme.nmap.org"
+      - "localhost"
+      - "127.0.0.1"
 
 # --- News RSS Feeds ---
 news:
@@ -104,13 +105,25 @@ safety:
 logging:
   level: "INFO"
   file: "data/logs/jane.log"
-  max_bytes: 5242880      # 5 MB
+  max_bytes: 5242880
   backup_count: 3
 
 # --- UI ---
 ui:
-  default: "cli"           # cli | webui
+  default: "cli"
   cli:
     theme: "dark"
     show_tool_calls: true
     show_thinking: false
+
+# --- Voice ---
+voice:
+  enabled: false                  # set true or pass --voice flag
+  tts_enabled: true               # speak Jane's responses aloud
+  stt_model: "base"               # tiny | base | small | medium
+  listen_duration: 7.0            # recording seconds (if VAD off)
+  use_vad: true                   # stop on silence (needs webrtcvad)
+  wake_word_enabled: false        # background wake-word listener
+  wake_words:
+    - "hey jane"
+    - "hey jarvis"

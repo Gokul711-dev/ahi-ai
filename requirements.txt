@@ -1,36 +1,39 @@
-# ═══════════════════════════════════════════════════════════════
-# A.H.I. — Artificial Human Intelligence
-# Python Dependencies (Phase 1 — The Smart Core)
-# ═══════════════════════════════════════════════════════════════
+# A.H.I. — Jane OS | requirements.txt
 
-# --- LLM Runtime ---
+# Core
 ollama>=0.4.0
-
-# --- Vector Database ---
 chromadb>=0.6.0
-
-# --- CLI / UI ---
 rich>=13.0
 prompt-toolkit>=3.0
-
-# --- Configuration & Validation ---
 pyyaml>=6.0
 pydantic>=2.0
-
-# --- Web Search & News ---
-duckduckgo-search>=7.0
-feedparser>=6.0
 requests>=2.32
-
-# --- System Info ---
 psutil>=6.0
 
-# --- Cyber / Networking Tools ---
+# Search & News
+duckduckgo-search>=7.0
+feedparser>=6.0
+
+# Cyber Tools
 python-whois>=0.9
-
-# --- Document Processing ---
-pymupdf>=1.25.0          # PDF text extraction (fitz)
-
-# --- Cyber Labs Phase 2 ---
 scapy>=2.5.0
 python-nmap>=0.7.1
+dnspython
+
+# Document Processing
+pymupdf>=1.25.0
+
+# ── OPTIONAL: GUI ─────────────────────────────────────
+PyQt6
+
+# ── OPTIONAL: Voice STT ───────────────────────────────
+#faster-whisper sounddevice
+
+# ── OPTIONAL: Voice TTS ───────────────────────────────
+pyttsx3
+
+# ── OPTIONAL: Wake Word ───────────────────────────────
+openwakeword
+
+# ── OPTIONAL: VAD mic detection ───────────────────────
+webrtcvad

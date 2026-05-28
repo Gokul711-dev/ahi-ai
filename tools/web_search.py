@@ -7,7 +7,7 @@ from typing import Optional
 
 
 def web_search(query: str, max_results: int = 5) -> list[dict]:
-    """Search the web using DuckDuckGo. Returns list of {title, url, snippet}."""
+    """Search the web via DuckDuckGo. Returns list of {title, url, snippet}."""
     try:
         import warnings
         with warnings.catch_warnings():
@@ -36,6 +36,7 @@ def get_news(topic: Optional[str] = None, max_results: int = 5, feeds: list[dict
     ]
     feed_list = feeds or default_feeds
     articles = []
+
     for feed_info in feed_list:
         try:
             feed = feedparser.parse(feed_info["url"])
@@ -55,6 +56,7 @@ def get_news(topic: Optional[str] = None, max_results: int = 5, feeds: list[dict
                     break
         except Exception:
             continue
+
     # Deduplicate and limit
     seen = set()
     unique = []
@@ -66,14 +68,15 @@ def get_news(topic: Optional[str] = None, max_results: int = 5, feeds: list[dict
 
 
 def format_search_results(results: list[dict]) -> str:
-    """Format search results as a readable string."""
+    """Format search/news results as readable markdown."""
     if not results:
         return "No results found."
     lines = []
     for i, r in enumerate(results, 1):
         lines.append(f"{i}. **{r.get('title', 'Untitled')}**")
-        if r.get('url'):
+        if r.get("url"):
             lines.append(f"   URL: {r['url']}")
-        if r.get('snippet') or r.get('summary'):
-            lines.append(f"   {r.get('snippet', r.get('summary', ''))}")
+        snippet = r.get("snippet") or r.get("summary", "")
+        if snippet:
+            lines.append(f"   {snippet}")
     return "\n".join(lines)

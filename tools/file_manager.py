@@ -1,14 +1,11 @@
 """
 tools/file_manager.py
-File system read/write operations, scoped to allowed directories.
+Filesystem read/write/list operations.
 """
 from pathlib import Path
-from typing import Optional
-import os
 
 
 def read_file(path: str) -> str:
-    """Read and return file contents."""
     try:
         p = Path(path)
         if not p.exists():
@@ -21,7 +18,6 @@ def read_file(path: str) -> str:
 
 
 def write_file(path: str, content: str) -> str:
-    """Write content to a file. Requires approval via ToolRegistry."""
     try:
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -32,7 +28,6 @@ def write_file(path: str, content: str) -> str:
 
 
 def list_directory(path: str = ".") -> str:
-    """List files and subdirectories."""
     try:
         p = Path(path)
         if not p.exists():
@@ -51,10 +46,8 @@ def list_directory(path: str = ".") -> str:
 
 
 def append_to_file(path: str, content: str) -> str:
-    """Append content to an existing file."""
     try:
-        p = Path(path)
-        with open(p, "a", encoding="utf-8") as f:
+        with open(path, "a", encoding="utf-8") as f:
             f.write(content)
         return f"[OK] Appended {len(content)} characters to {path}"
     except Exception as e:

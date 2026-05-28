@@ -3,13 +3,12 @@ memory/long_term.py
 ChromaDB-backed vector memory — semantic search over all past interactions.
 """
 import time
-from typing import Optional
 import chromadb
 from chromadb.config import Settings
 
 
 class OllamaEmbeddingFunction(chromadb.EmbeddingFunction):
-    """Custom embedding function using Ollama's nomic-embed-text."""
+    """Embedding via Ollama's nomic-embed-text model."""
 
     def __init__(self, model: str = "nomic-embed-text", base_url: str = "http://localhost:11434"):
         self.model = model
@@ -26,7 +25,6 @@ class OllamaEmbeddingFunction(chromadb.EmbeddingFunction):
             )
             resp.raise_for_status()
             data = resp.json()
-            # Ollama /api/embed returns {"embeddings": [[...]]}
             embeddings.append(data["embeddings"][0])
         return embeddings
 
@@ -56,7 +54,6 @@ class LongTermMemory:
         )
 
     def add_document(self, text: str, metadata: dict = None):
-        """Store a document/text chunk with optional metadata."""
         if not text.strip():
             return
         doc_id = f"mem_{int(time.time() * 1000)}"
@@ -67,26 +64,19 @@ class LongTermMemory:
         )
 
     def add_interaction(self, user_msg: str, assistant_msg: str):
-        """Store a conversation exchange."""
         text = f"User: {user_msg}\nJane: {assistant_msg}"
         self.add_document(text, metadata={"type": "interaction", "timestamp": time.time()})
 
     def retrieve(self, query: str, n_results: int = None) -> list[str]:
-        """Semantic search — returns list of relevant document strings."""
         n = n_results or self.max_results
         count = self.collection.count()
         if count == 0:
             return []
         n = min(n, count)
-        results = self.collection.query(
-            query_texts=[query],
-            n_results=n,
-        )
-        docs = results.get("documents", [[]])[0]
-        return docs
+        results = self.collection.query(query_texts=[query], n_results=n)
+        return results.get("documents", [[]])[0]
 
     def format_for_prompt(self, query: str, n_results: int = None) -> str:
-        """Return retrieved docs formatted as a string for prompt injection."""
         docs = self.retrieve(query, n_results)
         if not docs:
             return ""

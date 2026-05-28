@@ -1,15 +1,12 @@
 """
 tools/ip_locator.py
-IP geolocation using ip-api.com (free, no key needed).
+IP geolocation using ip-api.com (free, no key required).
 """
 import requests
 
 
 def locate_ip(ip_address: str) -> dict:
-    """
-    Returns geolocation data for an IP address.
-    Uses ip-api.com (45 req/min free tier).
-    """
+    """Return geolocation data for an IP address."""
     try:
         url = f"http://ip-api.com/json/{ip_address}"
         params = {
@@ -39,11 +36,10 @@ def locate_ip(ip_address: str) -> dict:
 
 
 def format_location(data: dict) -> str:
-    """Format location data as a human-readable string."""
     if "error" in data:
         return f"Could not locate {data.get('ip', 'that IP')}: {data['error']}"
     return (
-        f"{data['ip']} is located in {data['city']}, {data['region']}, {data['country']}\n"
+        f"**{data['ip']}** is located in **{data['city']}, {data['region']}, {data['country']}**\n"
         f"Coordinates: {data['latitude']}, {data['longitude']}\n"
         f"Timezone: {data['timezone']}\n"
         f"ISP: {data['isp']}"

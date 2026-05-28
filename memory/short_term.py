@@ -5,7 +5,6 @@ Conversation ring buffer — persists across restarts via JSON.
 import json
 import threading
 from pathlib import Path
-from typing import Optional
 
 
 class ShortTermMemory:
@@ -44,8 +43,7 @@ class ShortTermMemory:
         with self._lock:
             return self.buffer[-n:] if len(self.buffer) >= n else self.buffer[:]
 
-    def format_for_prompt(self, n: int = 10) -> str:
-        """Return recent exchanges formatted as a string for prompt injection."""
+    def format_for_prompt(self, n: int = 8) -> str:
         exchanges = self.get_last(n)
         if not exchanges:
             return ""

@@ -1,13 +1,12 @@
 """
 tools/system_info.py
-Hardware and OS status — for Jarvis-style system awareness.
+Hardware and OS status — Jarvis-style system awareness.
 """
 import platform
 import datetime
 
 
 def get_system_info() -> dict:
-    """Return comprehensive system information."""
     try:
         import psutil
         cpu_percent = psutil.cpu_percent(interval=0.5)
@@ -17,7 +16,7 @@ def get_system_info() -> dict:
         uptime = datetime.datetime.now() - boot_time
         net = psutil.net_io_counters()
 
-        info = {
+        return {
             "os": f"{platform.system()} {platform.version()}",
             "hostname": platform.node(),
             "python": platform.python_version(),
@@ -44,17 +43,15 @@ def get_system_info() -> dict:
             },
         }
     except ImportError:
-        info = {
+        return {
             "os": f"{platform.system()} {platform.version()}",
             "hostname": platform.node(),
             "python": platform.python_version(),
-            "note": "Install psutil for detailed hardware info.",
+            "note": "Install psutil for full hardware info.",
         }
-    return info
 
 
 def format_system_info(info: dict) -> str:
-    """Format system info as a readable string."""
     lines = [
         f"🖥  OS: {info.get('os', 'Unknown')}",
         f"🏠  Host: {info.get('hostname', 'Unknown')}",
@@ -64,10 +61,15 @@ def format_system_info(info: dict) -> str:
         lines.append(f"⚙️  CPU: {cpu['cores']} cores / {cpu['threads']} threads @ {cpu['freq_mhz']} MHz — {cpu['usage_percent']}% usage")
     if "memory" in info:
         mem = info["memory"]
-        lines.append(f"🧠  RAM: {mem['used_gb']} / {mem['total_gb']} GB used ({mem['percent']}%)")
+        lines.append(f"🧠  RAM: {mem['used_gb']} / {mem['total_gb']} GB ({mem['percent']}%)")
     if "disk" in info:
         disk = info["disk"]
-        lines.append(f"💾  Disk: {disk['used_gb']} / {disk['total_gb']} GB used ({disk['percent']}%)")
+        lines.append(f"💾  Disk: {disk['used_gb']} / {disk['total_gb']} GB ({disk['percent']}%)")
     if "uptime" in info:
         lines.append(f"⏱️  Uptime: {info['uptime']}")
+    if "network" in info:
+        net = info["network"]
+        lines.append(f"🌐  Network: ↑{net['bytes_sent_mb']} MB / ↓{net['bytes_recv_mb']} MB")
+    if "note" in info:
+        lines.append(f"ℹ️  {info['note']}")
     return "\n".join(lines)

@@ -1,6 +1,6 @@
 """
 memory/project_state.py
-Tracks active projects and goals — lets Jane remember what you're working on.
+Tracks active projects and goals across sessions.
 """
 import json
 import time
@@ -20,7 +20,7 @@ class ProjectState:
                 with open(self.filepath, "r", encoding="utf-8") as f:
                     return json.load(f)
             except (json.JSONDecodeError, OSError):
-                return {"active": None, "projects": {}}
+                pass
         return {"active": None, "projects": {}}
 
     def _save(self):
@@ -28,7 +28,6 @@ class ProjectState:
             json.dump(self._state, f, indent=2, ensure_ascii=False)
 
     def set_project(self, name: str, goal: str = "", tech_stack: list = None):
-        """Create or switch to a project."""
         self._state["active"] = name
         if name not in self._state["projects"]:
             self._state["projects"][name] = {
@@ -47,7 +46,6 @@ class ProjectState:
         self._save()
 
     def get_project(self, name: str = None) -> Optional[dict]:
-        """Get a project by name, or the active project if name is None."""
         key = name or self._state.get("active")
         if not key:
             return None
@@ -65,9 +63,9 @@ class ProjectState:
     def add_note(self, note: str):
         active = self._state.get("active")
         if active and active in self._state["projects"]:
-            self._state["projects"][active]["notes"].append({
-                "text": note, "timestamp": time.time()
-            })
+            self._state["projects"][active]["notes"].append(
+                {"text": note, "timestamp": time.time()}
+            )
             self._save()
 
     def add_recent_file(self, filepath: str):
@@ -83,7 +81,6 @@ class ProjectState:
         return list(self._state["projects"].values())
 
     def format_for_prompt(self) -> str:
-        """Return active project context for prompt injection."""
         project = self.get_active()
         if not project:
             return ""
@@ -96,6 +93,5 @@ class ProjectState:
         if project.get("recent_files"):
             lines.append(f"Recent Files: {', '.join(project['recent_files'][:3])}")
         if project.get("notes"):
-            last_note = project["notes"][-1]["text"]
-            lines.append(f"Last Note: {last_note}")
+            lines.append(f"Last Note: {project['notes'][-1]['text']}")
         return "\n".join(lines)
